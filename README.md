@@ -2,13 +2,13 @@ This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-
 
 ## Getting Started
 
-Firstly you will need to install all the needed packages and everything else.
+Firstly, you will need to install all the needed packages and everything else.
 
 This is the tutorial for the app if you want to watch it:
 
 https://www.youtube.com/watch?v=O5cmLDVTgAs&t=17421s&ab_channel=JavaScriptMastery
 
-First, run the development server:
+Then, run the development server:
 
 ```bash
 npm run dev
