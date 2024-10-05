@@ -3,6 +3,7 @@ import React from 'react'
 import { redirect } from 'next/navigation';
 import ThreadCard from '../cards/ThreadCard';
 import { User } from '@clerk/nextjs/server';
+import { fetchCommunityPosts } from '@/lib/actions/community.actions';
 
 interface Props{
     currentUserId: string,
@@ -15,8 +16,14 @@ const ThreadsTab = async ({
     accountId,
     accountType
 } : Props) => {
-    //Todo: Fetch profile threads
-    let result = await fetchUserPosts(accountId);
+    let result: any
+
+    if(accountType === 'Community'){
+        result = await fetchCommunityPosts(accountId);
+    }
+    else{
+        result = await fetchUserPosts(accountId);
+    }
 
     if(!result) redirect('/');
 
