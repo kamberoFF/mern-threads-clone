@@ -3,6 +3,11 @@ import { Organization } from '@clerk/nextjs/server';
 import Image from 'next/image';
 import Link from 'next/link';
 import React from 'react'
+import LikeButton from '../thread_interactivity/LikeButton';
+import ReplyButton from '../thread_interactivity/ReplyButton';
+import { threadId } from 'worker_threads';
+import RepostButton from '../thread_interactivity/RepostButton';
+import ShareButton from '../thread_interactivity/ShareButton';
 
 interface Props {
   id: string,
@@ -15,6 +20,7 @@ interface Props {
   comments: {
     author: {image: string},
   }[],
+  likes: {author: {image: string} }[],
   isComment?: boolean;
 }
 
@@ -27,6 +33,7 @@ const ThreadCard = ({
     community,
     createdAt,
     comments,
+    likes,
     isComment
 } : Props) => {
   return (
@@ -54,48 +61,22 @@ const ThreadCard = ({
 
             <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
               <div className='flex gap-3.5'>
-                <Image 
-                src={"/assets/heart-gray.svg"}
-                alt="heart"
-                width={24}
-                height={24}
-                className='cursor-pointer object-contain'
-                />
-                <Link href={`/thread/${id}`}>
-                  <Image 
-                  src={"/assets/reply.svg"}
-                  alt="reply"
-                  width={24}
-                  height={24}
-                  className='cursor-pointer object-contain'
-                  />
-                </Link>
-                <Image 
-                src={"/assets/repost.svg"}
-                alt="repost"
-                width={24}
-                height={24}
-                className='cursor-pointer object-contain'
-                />
-                <Image 
-                src={"/assets/share.svg"}
-                alt="share"
-                width={24}
-                height={24}
-                className='cursor-pointer object-contain'
-                />
+                <LikeButton />
+                {likes && likes.length > 0 && (
+                  <p className='text-subtle-medium text-gray-1 self-center'>{likes.length}</p>
+                )}
+                <ReplyButton threadId={id}/>
+                {comments && comments.length > 0 && (
+                  <p className='text-subtle-medium text-gray-1 self-center'>{comments.length}</p>
+                )}
+                <RepostButton />
+                <ShareButton />
               </div>
-              {isComment && comments.length > 0 && (
-                <Link href={`/thread/${id}`}>
-                  <p className='mt-1 text-subtle-medium text-gray-1'>{comments.length} replies</p>
-                </Link>
-              )}
             </div>
           </div>
         </div>
 
         {/* TODO: Delete thread */}
-        {/* TODO: Show comment logos */}
 
       </div>
         {!isComment && community && (

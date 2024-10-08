@@ -27,7 +27,8 @@ const Home = async () => {
                 author={thread.author}
                 community={thread.community}
                 createdAt={thread.createdAt}
-                comments={thread.children} />
+                comments={thread.children}
+                likes={thread.likes} />
               ))}
             </>
           )}

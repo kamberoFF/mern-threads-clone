@@ -7,6 +7,7 @@ const threadSchema = new mongooose.Schema({
     createdAt: {type: Date, default: Date.now},
     parentId: {type: String},
     children: [{type: mongooose.Schema.Types.ObjectId, ref: 'Thread'}],
+    likes: [{type: String}]
 });
 
 export const Thread = mongooose.models.Thread || mongooose.model('Thread', threadSchema);
