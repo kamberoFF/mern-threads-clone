@@ -20,7 +20,7 @@ interface Props {
   comments: {
     author: {image: string},
   }[],
-  likes: {author: {image: string} }[],
+  likes: [string],
   isComment?: boolean;
 }
 
@@ -61,10 +61,11 @@ const ThreadCard = ({
 
             <div className={`${isComment && 'mb-10'} mt-5 flex flex-col gap-3`}>
               <div className='flex gap-3.5'>
-                <LikeButton />
-                {likes && likes.length > 0 && (
-                  <p className='text-subtle-medium text-gray-1 self-center'>{likes.length}</p>
-                )}
+                <LikeButton
+                threadId={JSON.stringify(id)}
+                userId={currentUserId}
+                likes={likes} 
+                />
                 <ReplyButton threadId={id}/>
                 {comments && comments.length > 0 && (
                   <p className='text-subtle-medium text-gray-1 self-center'>{comments.length}</p>

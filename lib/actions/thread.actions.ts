@@ -240,8 +240,6 @@ export async function addCommentToThread(
 }
 
 export async function likeThread(threadId: string, userId: string) {
-  let isLiked = false;
-  
   connectToDB();
 
   try {
@@ -252,13 +250,16 @@ export async function likeThread(threadId: string, userId: string) {
       throw new Error("Thread not found");
     }
 
+    // Check if the likes array exists, and initialize it if not
+    if (!thread.likes) {
+      thread.likes = [];
+    }
+
     // Check if the user has already liked the thread
     if (thread.likes.includes(userId)) {
       thread.likes.pull(userId); // Remove the user's ID from the likes array
-    }
-    else {
+    } else {
       thread.likes.push(userId); // Add the user's ID to the likes array
-      isLiked = true;
     }
 
     // Save the updated thread to the database

@@ -44,6 +44,7 @@ const ThreadsTab = async ({
                 community={thread.community} // todo
                 createdAt={thread.createdAt}
                 comments={thread.children}
+                likes={thread.likes}
                 isComment
             />
         ))}
