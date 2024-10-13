@@ -1,0 +1,2 @@
+ok look i know this reapeats itself with the thread interactivity,
+but this is my first ever nextjs project dont hate on me much :(((

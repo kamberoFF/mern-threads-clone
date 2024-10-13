@@ -2,6 +2,7 @@
 
 import { revalidatePath } from "next/cache";
 
+import mongoose from "mongoose";
 import { connectToDB } from "../mongoose";
 
 import User from "../models/user.model";
@@ -267,5 +268,51 @@ export async function likeThread(threadId: string, userId: string) {
   } catch (err) {
     console.error("Error while liking thread:", err);
     throw new Error("Unable to like thread");
+  }
+}
+
+//Bate gospod da im pomaga na teq deto sa pravili mongoose
+export async function fetchUserReplies(userId: string) {
+  try {
+    await connectToDB();
+
+    // Find all threads where the user replied to another post (excluding replies to their own posts)
+    const replies = await Thread.find({
+      parentId: { $exists: true },  // Only replies (not top-level posts)
+      author: new mongoose.Types.ObjectId(userId),  // User's reply
+    })
+    .populate({
+      // Populate the original post (parent)
+      path: 'parentId',  
+      model: Thread,
+      select: '_id text author community children createdAt likes',
+      populate: {
+        path: 'author',
+        model: User,
+        select: 'name image _id',
+        match: { _id: { $ne: new mongoose.Types.ObjectId(userId) } }  // Exclude posts where the original post's author is the same as the reply's author
+      }
+    })
+    .populate({
+      // Populate replies to the user's reply (if needed)
+      path: 'children',  
+      model: Thread,
+      select: '_id text author community children createdAt likes',
+    })
+    .populate({
+      // Populate the author of the reply
+      path: 'author',  
+      model: User,
+      select: 'name image id _id',
+    });
+
+    // Filter out any replies where the parent post author wasn't populated (i.e., the user replied to themselves)
+    const filteredReplies = replies.filter((reply: any) => reply.parentId.author !== null);
+
+    return filteredReplies;
+
+  } catch (error) {
+    console.error('Error fetching replies:', error);
+    throw error;
   }
 }

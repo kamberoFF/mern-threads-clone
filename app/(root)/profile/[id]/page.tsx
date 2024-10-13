@@ -1,4 +1,3 @@
-import PostThread from '@/components/forms/PostThread';
 import ProfileHeader from '@/components/shared/ProfileHeader';
 import { fetchUser } from '@/lib/actions/user.actions';
 import { currentUser } from '@clerk/nextjs/server'
@@ -8,6 +7,7 @@ import React from 'react'
 import { profileTabs } from '@/constants';
 import Image from 'next/image';
 import ThreadsTab from '@/components/shared/ThreadsTab';
+import RepliesTab from '@/components/shared/RepliesTab';
 
 const Page = async ({params} : { params: {id: string}}) => {
     const user = await currentUser();
@@ -63,6 +63,14 @@ const Page = async ({params} : { params: {id: string}}) => {
                   currentUserId={user.id}
                   accountId={userInfo.id}
                   accountType="User"
+                />
+              )}
+              {tab.value === 'replies' && (
+                // <ReplyCard />
+                <RepliesTab
+                currentUserId={user.id}
+                accountId={userInfo._id}
+                accountType="User"
                 />
               )}
             </TabsContent>
