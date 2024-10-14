@@ -9,19 +9,21 @@ interface Props{
     currentUserId: string,
     accountId: string,
     //Original post data
-    parentId: string,
-    parentIdImage: string,
-    parentIdAuthorId: string,
-    parentIdName: string,
-    parentIdCreatedAt: string,
-    parentIdText: string,
-    parentIdLikes?: string[],
-    parentIdComments?: string[],
+    threadId: string,
+    threadAuthorImage: string,
+    threadAuthor_Id: string,
+    threadAuthorId: string,
+    threadAuthorName: string,
+    threadCreatedAt: string,
+    threadText: string,
+    threadLikes?: string[],
+    threadComments?: string[],
     //Reply data
     replyId: string,
     replyText: string,
     replyAuthorName: string,
     replyAuthorImage: string,
+    replyAuthor_Id: string,
     replyAuthorId: string,
     replyCreatedAt: string,
     replyLikes?: string[],
@@ -31,24 +33,26 @@ interface Props{
 const ReplyCard = ({
     currentUserId,
     accountId,
-    parentId,
-    parentIdImage,
-    parentIdAuthorId,
-    parentIdName,
-    parentIdCreatedAt,
-    parentIdText,
-    parentIdLikes = [],
-    parentIdComments = [],
+    threadId,
+    threadAuthorImage,
+    threadAuthor_Id,
+    threadAuthorId,
+    threadAuthorName,
+    threadCreatedAt,
+    threadText,
+    threadLikes = [],
+    threadComments = [],
     replyId,
     replyText,
     replyAuthorName,
     replyAuthorImage,
+    replyAuthor_Id,
     replyAuthorId,
     replyCreatedAt,
     replyLikes = [],
     replyComments = []
 } : Props) => {
-    const parentIsLiked = parentIdLikes.some((like) => like === currentUserId);
+    const parentIsLiked = threadLikes.some((like) => like === currentUserId);
     const replyIsLiked = replyLikes.some((like) => like === currentUserId);
     
   return (
@@ -59,20 +63,22 @@ const ReplyCard = ({
                 <div className="flex space-x-3">
                     <div className="flex flex-col items-center">
                         {/* Avatar */}
-                        <Avatar className="w-10 h-10">
-                        <AvatarImage src={parentIdImage} alt={parentIdName} />
-                        <AvatarFallback></AvatarFallback>
-                        </Avatar>
+                        <a href={`/profile/${threadAuthorId}`} className="mt-1">
+                          <Avatar className="w-12 h-12">
+                            <AvatarImage src={threadAuthorImage} alt={threadAuthorName} />
+                            <AvatarFallback></AvatarFallback>
+                          </Avatar>
+                        </a>
                         <div className="w-0.5 min-h-12 flex-grow bg-neutral-800 my-2" />
                     </div>
                     <div className="flex-1">
-                        <div className="flex items-center space-x-1">
+                        <a className="flex items-center space-x-1" href={`/profile/${threadAuthorId}`}>
                         {/* Username and date */}
-                        <h3 className="font-bold mr-1">{parentIdName}</h3>
-                        <span className="text-gray-500 text-sm">{parentIdCreatedAt}</span>
-                        </div>
+                        <h3 className="font-bold mr-1">{threadAuthorName}</h3>
+                        <span className="text-gray-500 text-sm">{threadCreatedAt}</span>
+                        </a>
                         {/* Post content */}
-                        <p className="text-sm mt-1">{parentIdText}</p>
+                        <p className="text-sm mt-1">{threadText}</p>
                         
                         {/* Image */}
                         {/* Not supported for now */}
@@ -87,14 +93,14 @@ const ReplyCard = ({
                         {/* Interaction buttons */}
                         <div className="flex space-x-4 mt-2 text-gray-500">
                         <LikeButton
-                            threadId={JSON.stringify(parentId)}
+                            threadId={JSON.stringify(threadId)}
                             currentUserId={currentUserId}
                             initialLikeState={parentIsLiked}
-                            likes={parentIdLikes}
+                            likes={threadLikes}
                         />
                         <RepliesButton
-                            threadId={JSON.stringify(parentId)}
-                            replies={parentIdComments}
+                            threadId={JSON.stringify(threadId)}
+                            replies={threadComments}
                         />
                         <button className="flex items-center space-x-1">
                             <Repeat2 className="w-5 h-5 hover:text-white" />
@@ -109,16 +115,18 @@ const ReplyCard = ({
                     {/* Reply */}
                     <div className="flex space-x-3 mt-4">
                     {/* Avatar */}
-                    <Avatar className="w-10 h-10">
-                        <AvatarImage src={replyAuthorImage} alt={replyAuthorName} />
-                        <AvatarFallback></AvatarFallback>
-                    </Avatar>
+                    <a href={`/profile/${replyAuthorId}`} className="mt-1">
+                      <Avatar className="w-12 h-12">
+                          <AvatarImage src={replyAuthorImage} alt={replyAuthorName}/>
+                          <AvatarFallback></AvatarFallback>
+                      </Avatar>
+                    </a>
                     <div className="flex-1">
-                        <div className="flex items-center space-x-1">
+                        <a className="flex items-center space-x-1" href={`/profile/${replyAuthorId}`}>
                         {/* Username and date */}
                         <h4 className="font-bold text-sm mr-1">{replyAuthorName}</h4>
                         <span className="text-gray-500 text-xs">{replyCreatedAt}</span>
-                        </div>
+                        </a>
                         {/* Post content */}
                         <p className="text-sm mt-1">{replyText}</p>
                         {/* Interaction buttons */}
@@ -144,7 +152,7 @@ const ReplyCard = ({
                 </div>
             </CardContent>
         </Card>
-        <div className="w-full h-px bg-neutral-800" role="separator" aria-hidden="true" />
+      <div className="w-full h-px bg-neutral-800" role="separator" aria-hidden="true" />
     </div>
   )
 }

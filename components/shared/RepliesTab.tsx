@@ -77,21 +77,23 @@ const RepliesTab = async ({
         accountId={accountId}  // ID of the reply author
   
         // Original Post (Parent) Data
-        parentId={reply.parentId?._id}  // Parent post ID
-        parentIdImage={reply.parentId?.author?.image || '/default-avatar.png'}  // Use default image if not available
-        parentIdAuthorId={reply.parentId?.author?._id}  // Parent post author's ID
-        parentIdName={reply.parentId?.author?.name}  // Parent post author's name
-        parentIdCreatedAt={reply.parentId ? new Date(reply.parentId.createdAt).toLocaleDateString() : 'N/A'}  // Parent post date
-        parentIdText={reply.parentId?.text}  // Parent post content
-        parentIdLikes={reply.parentId?.likes}  // Parent post likes
-        parentIdComments={reply.parentId?.children}  // Replies to the original post
+        threadId={reply.parentId?._id}  // Parent post ID
+        threadAuthorImage={reply.parentId?.author?.image || '/default-avatar.png'}  // Use default image if not available
+        threadAuthor_Id={reply.parentId?.author?._id}  // Parent post author's ID
+        threadAuthorId={reply.parentId?.author?.id}  // Parent post author's ID
+        threadAuthorName={reply.parentId?.author?.name}  // Parent post author's name
+        threadCreatedAt={reply.parentId ? new Date(reply.parentId.createdAt).toLocaleDateString() : 'N/A'}  // Parent post date
+        threadText={reply.parentId?.text}  // Parent post content
+        threadLikes={reply.parentId?.likes}  // Parent post likes
+        threadComments={reply.parentId?.children}  // Replies to the original post
   
         // Reply Data
         replyId={reply._id}  // User's reply ID
         replyText={reply.text}  // User's reply content
         replyAuthorName={reply.author.name}  // Reply author's name
         replyAuthorImage={reply.author.image}  // Reply author's avatar
-        replyAuthorId={reply.author._id}  // Reply author's ID
+        replyAuthor_Id={reply.author._id}  // Reply author's ID
+        replyAuthorId={reply.author.id}  // Reply author's ID
         replyCreatedAt={new Date(reply.createdAt).toLocaleDateString()}  // Reply date
         replyLikes={reply.likes}  // Reply likes
         replyComments={reply.children}  // Replies to the reply

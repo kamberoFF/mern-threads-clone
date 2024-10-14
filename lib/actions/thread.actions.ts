@@ -289,7 +289,7 @@ export async function fetchUserReplies(userId: string) {
       populate: {
         path: 'author',
         model: User,
-        select: 'name image _id',
+        select: 'name image id _id',
         match: { _id: { $ne: new mongoose.Types.ObjectId(userId) } }  // Exclude posts where the original post's author is the same as the reply's author
       }
     })
