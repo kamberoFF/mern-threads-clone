@@ -181,3 +181,46 @@ export async function getActivity(userId: string) {
     throw error;
   }
 }
+
+export async function followUser(
+  userId: string,
+  followUserId: string,
+): Promise<void> {
+  try {
+    connectToDB();
+
+    const user = await User.findOne({ id: userId });
+    const followUser = await User.findOne({ id: followUserId });
+
+    if (!user || !followUser) {
+      throw new Error("User not found");
+    }
+
+    // Ensure both arrays are initialized and properly typed
+    user.following = Array.isArray(user.following) ? user.following : [];
+    followUser.followers = Array.isArray(followUser.followers) ? followUser.followers : [];
+
+    // Save the initialized arrays
+    await user.save();
+    await followUser.save();
+
+    // Check if the user is already following the target user
+    const isFollowing = user.following.includes(followUserId);
+
+    if (isFollowing) {
+      // Unfollow
+      user.following = user.following.filter((id: string) => id !== followUserId);
+      followUser.followers = followUser.followers.filter((id: string) => id !== userId);
+    } else {
+      // Follow
+      user.following.push(followUserId);
+      followUser.followers.push(userId);
+    }
+
+    await user.save();
+    await followUser.save();
+  } catch (error) {
+    console.error("Error following user: ", error);
+    throw error;
+  }
+}

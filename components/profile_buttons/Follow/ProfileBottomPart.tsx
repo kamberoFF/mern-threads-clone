@@ -4,29 +4,32 @@ import { Button } from '@/components/ui/button'
 import React, { useState } from 'react'
 import FollwingInfo from './FollowingInfo'
 import Bio from './Bio'
+import { followUser } from '@/lib/actions/user.actions'
 
 interface Props {
     urlUserId: string,
     authUserId: string,
-    followersCount?: number,
-    followingCount?: number,
+    followers: string[],
+    following: string[],
     bio: string
 }
 
 const ProfileBottomPart = ({
     urlUserId,
     authUserId,
-    followersCount = 0,
-    followingCount = 0,
+    followers = [],
+    following = [],
     bio
 }: Props) => {
     const isOwner = urlUserId === authUserId
-    const [isFollowing, setIsFollowing] = useState(false)
-    const [followersCountState, setFollowersCount] = useState(followersCount)
+    const [isFollowing, setIsFollowing] = useState(followers.some(follower => follower === authUserId))
+    const [followersCountState, setFollowersCount] = useState(followers.length)
 
-    const handleFollow = () => {
+    const handleFollow = async () => {
         setIsFollowing(!isFollowing)
         {isFollowing ? setFollowersCount(followersCountState - 1) : setFollowersCount(followersCountState + 1)}
+
+        await followUser(authUserId, urlUserId);
     }
 
     return (
@@ -35,7 +38,7 @@ const ProfileBottomPart = ({
             <div className='flex items-center justify-between'>
                 <FollwingInfo
                   followersCount={followersCountState}
-                  followingCount={followingCount}
+                  followingCount={following.length}
                 />
             </div>
 

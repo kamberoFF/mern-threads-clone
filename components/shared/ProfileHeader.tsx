@@ -12,8 +12,8 @@ interface Props {
     imgUrl: string
     bio: string
     type?: 'User' | 'Community'
-    followersCount?: number
-    followingCount?: number
+    followers: string[]
+    following: string[]
   }
   
   const ProfileHeader = ({
@@ -25,8 +25,8 @@ interface Props {
     imgUrl,
     bio,
     type,
-    followersCount = 0,
-    followingCount = 0
+    followers = [],
+    following = []
 } : Props) => {
     return (
         <div className='flex w-full flex-col justify-start'>
@@ -55,6 +55,8 @@ interface Props {
             <ProfileBottomPart
                 urlUserId={urlUserId}
                 authUserId={authUserId}
+                followers={followers}
+                following={following}
                 bio={bio}
             />
 
