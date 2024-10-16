@@ -4,6 +4,7 @@ import React from 'react';
 import Image from 'next/image';
 import { useState } from 'react';
 import { likeThread } from '@/lib/actions/thread.actions';
+import { useRouter } from 'next/navigation';
 
 interface Props {
   threadId: string;
@@ -16,10 +17,17 @@ const LikeButton = ({
   userId,
   likes
 }: Props) => {
+  const router = useRouter();
+
   const [liked, setLiked] = useState(likes?.some((like) => like === userId) || false);
   const [likesCount, setLikesCount] = useState<number>(likes?.length || 0);
 
   const handleLike = async () => {
+    if(!userId){
+      router.push('/login');
+      return;
+    }
+
     await likeThread(JSON.parse(threadId), userId);
     setLiked(!liked);
     setLikesCount((prevCount) => (liked ? prevCount - 1 : prevCount + 1));
