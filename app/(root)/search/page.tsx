@@ -8,6 +8,7 @@ import { profileTabs } from '@/constants';
 import Image from 'next/image';
 import ThreadsTab from '@/components/shared/ThreadsTab';
 import UserCard from '@/components/cards/UserCard';
+import SearchAndDisplay from '@/components/search_components/SearchAndDisplay';
 
 const Page = async () => {
     const user = await currentUser();
@@ -37,24 +38,7 @@ const Page = async () => {
 
         {/* Search bar */}
 
-        <div className="mt-14 flex flex-col gap-9">
-          {result.users.length === 0 ? (
-            <p className='no-result'>No Users</p>
-          ) : (
-            <>
-              {result.users.map((user) => (
-                <UserCard 
-                  key={user.id}
-                  id={user.id}
-                  name={user.name}
-                  username={user.username}
-                  imageUrl={user.image}
-                  userType={'User'}
-                />
-              ))}
-            </>
-          )}
-        </div>
+        <SearchAndDisplay response={result}/>
     </section>
   )
 }
