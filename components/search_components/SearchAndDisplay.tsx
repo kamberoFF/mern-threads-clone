@@ -3,28 +3,32 @@
 import React from 'react'
 import { useState } from 'react'
 import UserCard from '../cards/UserCard'
+import { fetchUsers } from '@/lib/actions/user.actions'
 
 interface Props{
+  userId: string,
   response: {users : any[], isNext: boolean}
 }
 
 const SearchAndDisplay = ({
+  userId,
   response
 } : Props) => {
-  const [users, setUsers] = useState(response.users)
+  const [users, setUsers] = useState(response)
 
-  const searchHandler = () => {
+  const searchHandler = async () => {
     const search = document.querySelector('input[type="text"]') as HTMLInputElement;
     const searchValue = search.value.toLowerCase().trim();
 
     if (searchValue === '') {
-      setUsers(response.users);
+      setUsers(response);
       return;
     }
   
-    const filteredUsers = response.users.filter(user => {
-      return user.name.toLowerCase().startsWith(searchValue) || user.username.toLowerCase().startsWith(searchValue);
-    });
+    const filteredUsers = await fetchUsers({
+      userId,
+      searchString: searchValue
+    })
   
     setUsers(filteredUsers);
   };  
@@ -45,11 +49,11 @@ const SearchAndDisplay = ({
           </svg>
       </label>
       <div className="mt-14 flex flex-col gap-9">
-      {users.length === 0 ? (
+      {users.users && users.users.length === 0 ? (
         <p className='no-result'>No Users</p>
       ) : (
         <>
-          {users.map((user) => (
+          {users.users.map((user) => (
             <UserCard 
               key={user.id}
               id={user.id}

@@ -38,7 +38,7 @@ const Page = async () => {
 
         {/* Search bar */}
 
-        <SearchAndDisplay response={result}/>
+        <SearchAndDisplay userId={user.id} response={result}/>
     </section>
   )
 }
