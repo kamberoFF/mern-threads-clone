@@ -8,13 +8,19 @@ import ReplyButton from '../thread_interactivity/ReplyButton';
 import { threadId } from 'worker_threads';
 import RepostButton from '../thread_interactivity/RepostButton';
 import ShareButton from '../thread_interactivity/ShareButton';
+import {
+  HoverCard,
+  HoverCardContent,
+  HoverCardTrigger
+} from '@/components/ui/hover-card';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 
 interface Props {
   id: string,
   currentUserId: string,
   parentId: string | null,
   content: string,
-  author: {name: string, image: string, id: string},
+  author: {username: string, name: string, image: string, bio: string, id: string},
   community: {name: string, image: string, id: string} | null,
   createdAt: string,
   comments: {
@@ -42,20 +48,64 @@ const ThreadCard = ({
       <div className="flex items-start justify-between">
         <div className="flex w-full flex-1 flex-row gap-4">
           <div className='flex flex-col items-center'>
-            <Link href={`/profile/${author.id}`} className='relative h-11 w-11'>
-              <Image
-              src={author.image}
-              alt="Profile image"
-              fill
-              className='cursor-pointer rounded-full'
-              />
-            </Link>
+            <HoverCard>
+              <HoverCardTrigger asChild>
+                <Link href={`/profile/${author.id}`} className="relative h-11 w-11 rounded-full">
+                  <Image
+                    src={author.image}
+                    alt="Profile image"
+                    fill
+                    className="cursor-pointer rounded-full"
+                  />
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent 
+                className="min-w-[12rem] max-w-[16rem] w-max bg-zinc-900 border-zinc-800 text-zinc-100" 
+                side="bottom" 
+                align="start"
+              >
+                <div className="flex space-x-4">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={author.image} />
+                    <AvatarFallback>E36</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-0.5 flex-shrink">
+                    <h4 className="text-sm font-semibold leading-none truncate">@{author.username}</h4>
+                    <p className="text-xs text-zinc-400 mt-1 leading-tight line-clamp-2">
+                      {author.bio}
+                    </p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
             <div className='thread-card_bar' />
           </div>
           <div className='flex w-full flex-col'>
-            <Link href={`/profile/${author.id}`} className='w-fit'>
-            <h4 className='cursor-pointer text-base-semibold text-light-1'>{author.name}</h4>
-            </Link>
+          <HoverCard>
+              <HoverCardTrigger asChild>
+                <Link href={`/profile/${author.id}`} className='w-fit'>
+                  <h4 className='cursor-pointer text-base-semibold text-light-1'>{author.name}</h4>
+                </Link>
+              </HoverCardTrigger>
+              <HoverCardContent 
+                className="min-w-[12rem] max-w-[16rem] w-max bg-zinc-900 border-zinc-800 text-zinc-100" 
+                side="bottom" 
+                align="start"
+              >
+                <div className="flex space-x-4">
+                  <Avatar className="h-10 w-10">
+                    <AvatarImage src={author.image} />
+                    <AvatarFallback>E36</AvatarFallback>
+                  </Avatar>
+                  <div className="space-y-0.5 flex-shrink">
+                    <h4 className="text-sm font-semibold leading-none truncate">@{author.username}</h4>
+                    <p className="text-xs text-zinc-400 mt-1 leading-tight line-clamp-2">
+                      {author.bio}
+                    </p>
+                  </div>
+                </div>
+              </HoverCardContent>
+            </HoverCard>
 
             <p className="mt-2 text-small-regular text-light-2">{content}</p>
 

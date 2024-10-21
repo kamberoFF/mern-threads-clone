@@ -38,8 +38,8 @@ const ThreadsTab = async ({
                 content={thread.text}
                 author={
                     accountType === 'User' ?
-                    {name: result.name, image: result.image, id: result._id} :
-                    {name: thread.author.name, image: thread.author.image, id: thread.author._id}
+                    {username: result.username, name: result.name, image: result.image, bio: result.bio,  id: result._id} :
+                    {username: thread.author.username, name: thread.author.name, image: thread.author.image, bio: thread.author.bio, id: thread.author._id}
                 } 
                 community={thread.community} // todo
                 createdAt={thread.createdAt}

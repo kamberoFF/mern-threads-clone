@@ -33,7 +33,7 @@ export async function fetchPosts(pageNumber = 1, pageSize = 20) {
       populate: {
         path: "author", // Populate the author field within children
         model: User,
-        select: "_id name parentId image", // Select only _id and username fields of the author
+        select: "_id username name parentId image bio", // Select only _id and username fields of the author
       },
     });
 
@@ -166,12 +166,12 @@ export async function fetchThreadById(threadId: string) {
       .populate({
         path: "author",
         model: User,
-        select: "_id id name image",
+        select: "_id id username name image bio",
       }) // Populate the author field with _id and username
       .populate({
         path: "community",
         model: Community,
-        select: "_id id name image",
+        select: "_id id username name image bio",
       }) // Populate the community field with _id and name
       .populate({
         path: "children", // Populate the children field
@@ -179,7 +179,7 @@ export async function fetchThreadById(threadId: string) {
           {
             path: "author", // Populate the author field within children
             model: User,
-            select: "_id id name parentId image", // Select only _id and username fields of the author
+            select: "_id id username name parentId image bio", // Select only _id and username fields of the author
           },
           {
             path: "children", // Populate the children field within children
@@ -187,7 +187,7 @@ export async function fetchThreadById(threadId: string) {
             populate: {
               path: "author", // Populate the author field within nested children
               model: User,
-              select: "_id id name parentId image", // Select only _id and username fields of the author
+              select: "_id id username name parentId image bio", // Select only _id and username fields of the author
             },
           },
         ],
@@ -289,7 +289,7 @@ export async function fetchUserReplies(userId: string) {
       populate: {
         path: 'author',
         model: User,
-        select: 'name image id _id',
+        select: 'username name image bio id _id',
         match: { _id: { $ne: new mongoose.Types.ObjectId(userId) } }  // Exclude posts where the original post's author is the same as the reply's author
       }
     })
@@ -303,7 +303,7 @@ export async function fetchUserReplies(userId: string) {
       // Populate the author of the reply
       path: 'author',  
       model: User,
-      select: 'name image id _id',
+      select: 'username name image bio id _id',
     });
 
     // Filter out any replies where the parent post author wasn't populated (i.e., the user replied to themselves)
